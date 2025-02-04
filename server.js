@@ -25,6 +25,9 @@ app.use(express.static('public'))
 app.use(cookieParser())
 app.use(express.json())
 
+// serve the uploads folder static
+app.use('/uploads', express.static('uploads'))
+
 // Express Routing:
 
 // REST API for Toys
