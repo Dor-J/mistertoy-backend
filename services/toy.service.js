@@ -12,22 +12,54 @@ export const toyService = {
 //const PAGE_SIZE = 5
 const toys = utilService.readJsonFile('data/toy.json')
 
-function query(filterBy = { name: '' }) {
-  // const regex = new RegExp(filterBy.name, 'i')
-  var toysToReturn = toys
-  //.filter((toy) => regex.test(toy.name))
+function query(filterBy) {
+  if (!filterBy) return Promise.resolve(toys)
+  let toysToReturn = toys
+  const { name, minPrice, inStock, label, sortBy, orderBy } = filterBy
 
-  // if (filterBy.minSpeed) {
-  //   toysToReturn = toysToReturn.filter((toy) => toy.speed >= filterBy.minSpeed)
-  // }
-  // if (filterBy.maxPrice) {
-  //   toysToReturn = toysToReturn.filter((toy) => toy.price <= filterBy.maxPrice)
-  // }
+  if (name) {
+    const regExp = new RegExp(name, 'i')
+    toysToReturn = toysToReturn.filter((toy) => regExp.test(toy.name))
+  }
 
-  // if (filterBy.pageIdx !== undefined) {
-  //   const startIdx = filterBy.pageIdx * PAGE_SIZE
-  //   toysToReturn = toysToReturn.slice(startIdx, startIdx + PAGE_SIZE)
-  // }
+  if (label) {
+    const regExpLabel = new RegExp(label, 'i')
+    toysToReturn = toysToReturn.filter((toy) => {
+      if (!toy.labels || !Array.isArray(toy.labels) || toy.labels.length === 0)
+        return false
+      else return toy.labels.some((currLabel) => regExpLabel.test(currLabel))
+    })
+  }
+
+  if (minPrice) {
+    toysToReturn = toysToReturn.filter((toy) => toy.price >= minPrice)
+  }
+
+  const isInStock =
+    inStock === 'true' ? true : inStock === 'false' ? false : null
+  if (isInStock !== null) {
+    toysToReturn = toysToReturn.filter((toy) => toy.inStock === isInStock)
+  }
+
+  if (sortBy) {
+    // sortBy: name / price / createdAt
+    const sortOrder = orderBy === 'asc' ? 1 : -1
+
+    if (sortBy === 'name') {
+      toysToReturn = toysToReturn.sort(
+        (a, b) => a.name.localeCompare(b.name) * sortOrder
+      )
+    } else if (sortBy === 'minPrice') {
+      toysToReturn = toysToReturn.sort(
+        (a, b) => (a.price - b.price) * sortOrder
+      )
+    } else if (sortBy === 'createdAt') {
+      toysToReturn = toysToReturn.sort(
+        (a, b) => (a.createdAt - b.createdAt) * sortOrder
+      )
+    }
+  }
+
   return Promise.resolve(toysToReturn)
 }
 
