@@ -65,6 +65,10 @@ function query(filterBy) {
 
 function getById(toyId) {
   const toy = toys.find((toy) => toy._id === toyId)
+
+  // add next/prev ids
+  _setNextPrevToyId(toy)
+
   return Promise.resolve(toy)
 }
 
@@ -103,4 +107,15 @@ function _saveToysToFile() {
       resolve()
     })
   })
+}
+
+function _setNextPrevToyId(toy) {
+  const toyIdx = toys.findIndex((currToy) => currToy._id === toy._id)
+  if (toyIdx < 0) return
+
+  const nextIdx = (toyIdx + 1) % toys.length
+  const prevIdx = (toyIdx - 1 + toys.length) % toys.length
+
+  toy.nextToyId = toys[nextIdx]._id
+  toy.prevToyId = toys[prevIdx]._id
 }
