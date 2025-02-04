@@ -87,7 +87,9 @@ app.post('/api/toy', (req, res) => {
 
 app.put('/api/toy/:id', (req, res) => {
   const loggedInUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedInUser) return res.status(401).send('Cannot update toy')
+  if (!loggedInUser || !loggedInUser.isAdmin) {
+    return res.status(403).send('Not authorized')
+  }
 
   const { id } = req.params
   const toy = {
@@ -127,7 +129,9 @@ app.delete('/api/toy/:toyId', (req, res) => {
 // User API
 app.get('/api/user', (req, res) => {
   const loggedInUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedInUser) return res.status(400).send('No logged in user')
+  if (!loggedInUser || !loggedInUser.isAdmin) {
+    return res.status(403).send('Not authorized')
+  }
 
   userService
     .query()
