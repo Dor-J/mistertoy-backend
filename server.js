@@ -36,6 +36,7 @@ app.get('/api/toy', (req, res) => {
     label: req.query.label || [],
     sortBy: req.query.sortBy || '',
     orderBy: req.query.orderBy || '',
+    pageIdx: +req.query.pageIdx || 0,
   }
   toyService
     .query(filterBy)

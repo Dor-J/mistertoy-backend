@@ -9,7 +9,7 @@ export const toyService = {
   save,
 }
 
-//const PAGE_SIZE = 5
+const PAGE_SIZE = 6
 const toys = utilService.readJsonFile('data/toy.json')
 
 function query(filterBy) {
@@ -60,7 +60,16 @@ function query(filterBy) {
     }
   }
 
-  return Promise.resolve(toysToReturn)
+  const filteredToysLength = filteredToys.length
+
+  if (filterBy.pageIdx !== undefined) {
+    const startIdx = filterBy.pageIdx * PAGE_SIZE
+    filteredToys = filteredToys.slice(startIdx, startIdx + PAGE_SIZE)
+  }
+
+  return Promise.resolve(getMaxPage(filteredToysLength)).then((maxPage) => {
+    return { toys: filteredToys, maxPage }
+  })
 }
 
 function getById(toyId) {
@@ -118,4 +127,11 @@ function _setNextPrevToyId(toy) {
 
   toy.nextToyId = toys[nextIdx]._id
   toy.prevToyId = toys[prevIdx]._id
+}
+
+function getMaxPage(filteredToysLength) {
+  if (filteredToysLength) {
+    return Promise.resolve(Math.ceil(filteredToysLength / PAGE_SIZE))
+  }
+  return Promise.resolve(Math.ceil(toys.length / PAGE_SIZE))
 }
