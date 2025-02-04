@@ -84,8 +84,9 @@ app.post('/api/toy', (req, res) => {
 app.put('/api/toy/:id', (req, res) => {
   // const loggedinUser = userService.validateToken(req.cookies.loginToken)
   // if (!loggedinUser) return res.status(401).send('Cannot update toy')
-
+  const { id } = req.params
   const toy = {
+    _id: id,
     name: req.body.name,
     price: +req.body.price,
     inStock: req.body.inStock,
