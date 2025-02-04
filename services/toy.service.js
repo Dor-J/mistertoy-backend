@@ -49,7 +49,7 @@ function query(filterBy) {
       toysToReturn = toysToReturn.sort(
         (a, b) => a.name.localeCompare(b.name) * sortOrder
       )
-    } else if (sortBy === 'minPrice') {
+    } else if (sortBy === 'price') {
       toysToReturn = toysToReturn.sort(
         (a, b) => (a.price - b.price) * sortOrder
       )
