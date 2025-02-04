@@ -61,9 +61,9 @@ app.get('/api/toy/:toyId', (req, res) => {
 app.post('/api/toy', (req, res) => {
   //return res.status(404).send('NOT FOUND')
 
-  const loggedinUser = userService.validateToken(req.cookies.loginToken)
+  const loggedInUser = userService.validateToken(req.cookies.loginToken)
   // ensure logged in and isAdmin
-  if (!loggedinUser || !loggedinUser.isAdmin) {
+  if (!loggedInUser || !loggedInUser.isAdmin) {
     return res.status(403).send('Not authorized')
   }
 
@@ -85,8 +85,8 @@ app.post('/api/toy', (req, res) => {
 })
 
 app.put('/api/toy/:id', (req, res) => {
-  const loggedinUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedinUser) return res.status(401).send('Cannot update toy')
+  const loggedInUser = userService.validateToken(req.cookies.loginToken)
+  if (!loggedInUser) return res.status(401).send('Cannot update toy')
 
   const { id } = req.params
   const toy = {
@@ -108,8 +108,8 @@ app.put('/api/toy/:id', (req, res) => {
 })
 
 app.delete('/api/toy/:toyId', (req, res) => {
-  const loggedinUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedinUser || !loggedinUser.isAdmin) {
+  const loggedInUser = userService.validateToken(req.cookies.loginToken)
+  if (!loggedInUser || !loggedInUser.isAdmin) {
     return res.status(403).send('Not authorized')
   }
 
@@ -125,8 +125,8 @@ app.delete('/api/toy/:toyId', (req, res) => {
 
 // User API
 app.get('/api/user', (req, res) => {
-  const loggedinUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedinUser) return res.status(400).send('No logged in user')
+  const loggedInUser = userService.validateToken(req.cookies.loginToken)
+  if (!loggedInUser) return res.status(400).send('No logged in user')
 
   userService
     .query()
@@ -196,13 +196,13 @@ app.post('/api/auth/logout', (req, res) => {
 })
 
 app.put('/api/user', (req, res) => {
-  const loggedinUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedinUser) return res.status(400).send('No logged in user')
+  const loggedInUser = userService.validateToken(req.cookies.loginToken)
+  if (!loggedInUser) return res.status(400).send('No logged in user')
   const { diff } = req.body
-  if (loggedinUser.score + diff < 0) return res.status(400).send('No credit')
-  loggedinUser.score += diff
+  if (loggedInUser.score + diff < 0) return res.status(400).send('No credit')
+  loggedInUser.score += diff
   return userService
-    .save(loggedinUser)
+    .save(loggedInUser)
     .then((user) => {
       const token = userService.getLoginToken(user)
       res.cookie('loginToken', token)
