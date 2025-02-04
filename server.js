@@ -30,10 +30,12 @@ app.use(express.json())
 // REST API for Toys
 app.get('/api/toy', (req, res) => {
   const filterBy = {
-    txt: req.query.txt || '',
-    minSpeed: +req.query.minSpeed || 0,
-    maxPrice: +req.query.maxPrice || 0,
-    pageIdx: req.query.pageIdx || undefined,
+    name: req.query.name || '',
+    minPrice: +req.query.minPrice || 0,
+    inStock: req.query.inStock || '',
+    label: req.query.label || [],
+    sortBy: req.query.sortBy || '',
+    orderBy: req.query.orderBy || '',
   }
   toyService
     .query(filterBy)
