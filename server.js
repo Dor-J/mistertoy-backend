@@ -61,8 +61,11 @@ app.get('/api/toy/:toyId', (req, res) => {
 app.post('/api/toy', (req, res) => {
   //return res.status(404).send('NOT FOUND')
 
-  // const loggedinUser = userService.validateToken(req.cookies.loginToken)
-  // if (!loggedinUser) return res.status(401).send('Cannot add toy')
+  const loggedinUser = userService.validateToken(req.cookies.loginToken)
+  // ensure logged in and isAdmin
+  if (!loggedinUser || !loggedinUser.isAdmin) {
+    return res.status(403).send('Not authorized')
+  }
 
   const toy = {
     name: req.body.name,
@@ -82,8 +85,9 @@ app.post('/api/toy', (req, res) => {
 })
 
 app.put('/api/toy/:id', (req, res) => {
-  // const loggedinUser = userService.validateToken(req.cookies.loginToken)
-  // if (!loggedinUser) return res.status(401).send('Cannot update toy')
+  const loggedinUser = userService.validateToken(req.cookies.loginToken)
+  if (!loggedinUser) return res.status(401).send('Cannot update toy')
+
   const { id } = req.params
   const toy = {
     _id: id,
@@ -104,8 +108,10 @@ app.put('/api/toy/:id', (req, res) => {
 })
 
 app.delete('/api/toy/:toyId', (req, res) => {
-  // const loggedinUser = userService.validateToken(req.cookies.loginToken)
-  // if (!loggedinUser) return res.status(401).send('Cannot remove toy')
+  const loggedinUser = userService.validateToken(req.cookies.loginToken)
+  if (!loggedinUser || !loggedinUser.isAdmin) {
+    return res.status(403).send('Not authorized')
+  }
 
   const { toyId } = req.params
   toyService
