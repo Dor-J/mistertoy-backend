@@ -162,5 +162,65 @@
     "inStock": false,
     "updatedAt": 1738571545293,
     "createdAt": 1738571545293
+  },
+  {
+    "name": "Vue 407",
+    "price": 8413,
+    "inStock": false,
+    "labels": "Box game",
+    "createdAt": 1738548530665,
+    "updatedAt": 1738623564407,
+    "_id": "7UOAF"
+  },
+  {
+    "name": "Mongo 761",
+    "price": 3367,
+    "inStock": false,
+    "labels": "Box game",
+    "createdAt": 1738567454803,
+    "updatedAt": 1738624045761,
+    "_id": "wMaKl"
+  },
+  {
+    "name": "Mongo 761",
+    "price": 3362,
+    "inStock": false,
+    "labels": "Box game",
+    "createdAt": 1738567454803,
+    "updatedAt": 1738624068026,
+    "_id": "xN1BP"
+  },
+  {
+    "name": "MVC 289",
+    "price": 1604,
+    "inStock": false,
+    "labels": "Box game",
+    "createdAt": 1738591637086,
+    "updatedAt": 1738624697289,
+    "_id": "1kVsw"
+  },
+  {
+    "name": "Redux11",
+    "price": 213,
+    "inStock": true,
+    "labels": [
+      "Art",
+      "Box game"
+    ],
+    "createdAt": 1738527491986,
+    "updatedAt": 1738625093447,
+    "_id": "GcSjJ"
+  },
+  {
+    "name": "Redux112",
+    "price": 2131,
+    "inStock": true,
+    "labels": [
+      "Art",
+      "On wheels"
+    ],
+    "createdAt": 1738527491986,
+    "updatedAt": 1738625138692,
+    "_id": "e3t9w"
   }
 ]
