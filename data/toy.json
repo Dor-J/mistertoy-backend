@@ -167,7 +167,9 @@
     "name": "Vue 407",
     "price": 8413,
     "inStock": false,
-    "labels": "Box game",
+    "labels": [
+      "Box game"
+    ],
     "createdAt": 1738548530665,
     "updatedAt": 1738623564407,
     "_id": "7UOAF"
@@ -176,7 +178,9 @@
     "name": "Mongo 761",
     "price": 3367,
     "inStock": false,
-    "labels": "Box game",
+    "labels": [
+      "Box game"
+    ],
     "createdAt": 1738567454803,
     "updatedAt": 1738624045761,
     "_id": "wMaKl"
@@ -185,7 +189,9 @@
     "name": "Mongo 761",
     "price": 3362,
     "inStock": false,
-    "labels": "Box game",
+    "labels": [
+      "Box game"
+    ],
     "createdAt": 1738567454803,
     "updatedAt": 1738624068026,
     "_id": "xN1BP"
@@ -194,7 +200,9 @@
     "name": "MVC 289",
     "price": 1604,
     "inStock": false,
-    "labels": "Box game",
+    "labels": [
+      "Box game"
+    ],
     "createdAt": 1738591637086,
     "updatedAt": 1738624697289,
     "_id": "1kVsw"
