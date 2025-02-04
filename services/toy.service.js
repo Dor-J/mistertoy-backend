@@ -75,6 +75,8 @@ function query(filterBy) {
 function getById(toyId) {
   const toy = toys.find((toy) => toy._id === toyId)
 
+  if (!toy) return Promise.reject(`Toy not found`)
+
   // add next/prev ids
   _setNextPrevToyId(toy)
 
