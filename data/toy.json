@@ -19,7 +19,9 @@
     "_id": "o9ZgCWh",
     "inStock": true,
     "updatedAt": 1738607455838,
-    "createdAt": 1738607455838
+    "createdAt": 1738607455838,
+    "nextToyId": "9oNmE8a",
+    "prevToyId": "vlJhUB6"
   },
   {
     "name": "Quick3",
@@ -230,5 +232,16 @@
     "createdAt": 1738527491986,
     "updatedAt": 1738625138692,
     "_id": "e3t9w"
+  },
+  {
+    "name": "React 883",
+    "price": 8781,
+    "inStock": false,
+    "labels": [
+      "Puzzle"
+    ],
+    "createdAt": 1738676092883,
+    "updatedAt": 1738676092883,
+    "_id": "WnbW6"
   }
 ]

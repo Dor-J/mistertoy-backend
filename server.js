@@ -116,7 +116,7 @@ app.delete('/api/toy/:toyId', (req, res) => {
   const { toyId } = req.params
   toyService
     .remove(toyId)
-    .then(() => res.send('Removed!'))
+    .then(() => res.send('Removed succesfully!'))
     .catch((err) => {
       loggerService.error('Cannot remove toy', err)
       res.status(400).send('Cannot remove toy')
@@ -125,6 +125,9 @@ app.delete('/api/toy/:toyId', (req, res) => {
 
 // User API
 app.get('/api/user', (req, res) => {
+  const loggedinUser = userService.validateToken(req.cookies.loginToken)
+  if (!loggedinUser) return res.status(400).send('No logged in user')
+
   userService
     .query()
     .then((users) => res.send(users))
