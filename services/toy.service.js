@@ -9,22 +9,22 @@ export const toyService = {
   save,
 }
 
-//const PAGE_SIZE = 5
+const PAGE_SIZE = 6
 const toys = utilService.readJsonFile('data/toy.json')
 
 function query(filterBy) {
   if (!filterBy) return Promise.resolve(toys)
-  let toysToReturn = toys
+  let filteredToys = toys
   const { name, minPrice, inStock, label, sortBy, orderBy } = filterBy
 
   if (name) {
     const regExp = new RegExp(name, 'i')
-    toysToReturn = toysToReturn.filter((toy) => regExp.test(toy.name))
+    filteredToys = filteredToys.filter((toy) => regExp.test(toy.name))
   }
 
   if (label) {
     const regExpLabel = new RegExp(label, 'i')
-    toysToReturn = toysToReturn.filter((toy) => {
+    filteredToys = filteredToys.filter((toy) => {
       if (!toy.labels || !Array.isArray(toy.labels) || toy.labels.length === 0)
         return false
       else return toy.labels.some((currLabel) => regExpLabel.test(currLabel))
@@ -32,13 +32,13 @@ function query(filterBy) {
   }
 
   if (minPrice) {
-    toysToReturn = toysToReturn.filter((toy) => toy.price >= minPrice)
+    filteredToys = filteredToys.filter((toy) => toy.price >= minPrice)
   }
 
   const isInStock =
     inStock === 'true' ? true : inStock === 'false' ? false : null
   if (isInStock !== null) {
-    toysToReturn = toysToReturn.filter((toy) => toy.inStock === isInStock)
+    filteredToys = filteredToys.filter((toy) => toy.inStock === isInStock)
   }
 
   if (sortBy) {
@@ -46,21 +46,30 @@ function query(filterBy) {
     const sortOrder = orderBy === 'asc' ? 1 : -1
 
     if (sortBy === 'name') {
-      toysToReturn = toysToReturn.sort(
+      filteredToys = filteredToys.sort(
         (a, b) => a.name.localeCompare(b.name) * sortOrder
       )
     } else if (sortBy === 'price') {
-      toysToReturn = toysToReturn.sort(
+      filteredToys = filteredToys.sort(
         (a, b) => (a.price - b.price) * sortOrder
       )
     } else if (sortBy === 'createdAt') {
-      toysToReturn = toysToReturn.sort(
+      filteredToys = filteredToys.sort(
         (a, b) => (a.createdAt - b.createdAt) * sortOrder
       )
     }
   }
 
-  return Promise.resolve(toysToReturn)
+  const filteredToysLength = filteredToys.length
+
+  if (filterBy.pageIdx !== undefined) {
+    const startIdx = filterBy.pageIdx * PAGE_SIZE
+    filteredToys = filteredToys.slice(startIdx, startIdx + PAGE_SIZE)
+  }
+
+  return Promise.resolve(getMaxPage(filteredToysLength)).then((maxPage) => {
+    return { toys: filteredToys, maxPage }
+  })
 }
 
 function getById(toyId) {
@@ -118,4 +127,11 @@ function _setNextPrevToyId(toy) {
 
   toy.nextToyId = toys[nextIdx]._id
   toy.prevToyId = toys[prevIdx]._id
+}
+
+function getMaxPage(filteredToysLength) {
+  if (filteredToysLength) {
+    return Promise.resolve(Math.ceil(filteredToysLength / PAGE_SIZE))
+  }
+  return Promise.resolve(Math.ceil(toys.length / PAGE_SIZE))
 }
