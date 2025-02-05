@@ -50,6 +50,21 @@ app.get('/api/toy', (req, res) => {
     })
 })
 
+app.get('/api/alltoys', (req, res) => {
+  const loggedInUser = userService.validateToken(req.cookies.loginToken)
+  if (!loggedInUser) {
+    return res.status(401).send('Not logged in yet')
+  }
+
+  toyService
+    .query()
+    .then((toys) => res.send(toys))
+    .catch((err) => {
+      loggerService.error('Cannot get all toys', err)
+      res.status(400).send('Cannot get all toys')
+    })
+})
+
 app.get('/api/toy/:toyId', (req, res) => {
   const { toyId } = req.params
 
