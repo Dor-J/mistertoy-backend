@@ -167,7 +167,7 @@
   },
   {
     "name": "Vue 407",
-    "price": 8413,
+    "price": 413,
     "inStock": false,
     "labels": [
       "Box game"
@@ -178,7 +178,7 @@
   },
   {
     "name": "Mongo 761",
-    "price": 3367,
+    "price": 367,
     "inStock": false,
     "labels": [
       "Box game"
@@ -189,7 +189,7 @@
   },
   {
     "name": "Mongo 761",
-    "price": 3362,
+    "price": 362,
     "inStock": false,
     "labels": [
       "Box game"
@@ -200,7 +200,7 @@
   },
   {
     "name": "MVC 289",
-    "price": 1604,
+    "price": 604,
     "inStock": false,
     "labels": [
       "Box game"
@@ -223,7 +223,7 @@
   },
   {
     "name": "Redux112",
-    "price": 2131,
+    "price": 213,
     "inStock": true,
     "labels": [
       "Art",
@@ -235,7 +235,7 @@
   },
   {
     "name": "React 883",
-    "price": 8781,
+    "price": 878,
     "inStock": false,
     "labels": [
       "Puzzle"
