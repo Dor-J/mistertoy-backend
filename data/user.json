@@ -27,8 +27,16 @@
     "username": "admin",
     "password": "admin",
     "fullname": "admin",
-    "score": 50000000000000001,
+    "score": 49999999999999750,
     "_id": "Uo93j",
     "isAdmin": true
+  },
+  {
+    "username": "dsf",
+    "password": "fsd",
+    "fullname": "fsd",
+    "score": 10000,
+    "isAdmin": false,
+    "_id": "S2njSp8"
   }
 ]

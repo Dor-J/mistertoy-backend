@@ -102,7 +102,7 @@ function _saveUsersToFile() {
     const usersStr = JSON.stringify(users, null, 2)
     fs.writeFile('data/user.json', usersStr, (err) => {
       if (err) {
-        return console.log(err)
+        return console.error(err)
       }
       resolve()
     })
