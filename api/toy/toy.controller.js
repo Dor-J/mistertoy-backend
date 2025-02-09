@@ -4,7 +4,13 @@ import { logger } from '../../services/logger.service.js'
 export async function getToys(req, res) {
   try {
     const filterBy = {
-      txt: req.query.txt || '',
+      name: req.query.name || '',
+      minPrice: +req.query.minPrice || 0,
+      inStock: req.query.inStock || '',
+      label: req.query.label || '',
+      sortBy: req.query.sortBy || '',
+      orderBy: req.query.orderBy || '',
+      pageIdx: +req.query.pageIdx || 0,
     }
     const toys = await toyService.query(filterBy)
     res.json(toys)
@@ -26,10 +32,17 @@ export async function getToyById(req, res) {
 }
 
 export async function addToy(req, res) {
-  const { loggedinUser } = req
+  //const { loggedinUser } = req
 
   try {
-    const toy = req.body
+    const toy = {
+      name: req.body.name,
+      price: +req.body.price,
+      inStock: req.body.inStock,
+      labels: req.body.labels,
+      createdAt: +req.body.createdAt,
+      updatedAt: +req.body.updatedAt,
+    }
 
     const addedToy = await toyService.add(toy)
     res.json(addedToy)
@@ -41,7 +54,7 @@ export async function addToy(req, res) {
 
 export async function updateToy(req, res) {
   try {
-    const toy = { ...req.body, _id: req.params.id }
+    const toy = { ...req.body, _id: req.params.id, updatedAt: Date.now() }
     const updatedToy = await toyService.update(toy)
     res.json(updatedToy)
   } catch (err) {
@@ -54,7 +67,7 @@ export async function removeToy(req, res) {
   try {
     const toyId = req.params.id
     const deletedCount = await toyService.remove(toyId)
-    res.send(`${deletedCount} toys removed`)
+    res.json({ msg: `${deletedCount} toys removed` })
   } catch (err) {
     logger.error('Failed to remove toy', err)
     res.status(500).send({ err: 'Failed to remove toy' })
@@ -63,12 +76,15 @@ export async function removeToy(req, res) {
 
 export async function addToyMsg(req, res) {
   const { loggedinUser } = req
+  const { _id, fullname } = loggedinUser
   try {
     const toyId = req.params.id
     const msg = {
       txt: req.body.txt,
-      by: loggedinUser,
-      createdAt: Date.now(),
+      by: {
+        _id,
+        fullname,
+      },
     }
     const savedMsg = await toyService.addToyMsg(toyId, msg)
     res.json(savedMsg)
@@ -82,7 +98,9 @@ export async function removeToyMsg(req, res) {
   const { loggedinUser } = req
   try {
     // const toyId = req.params.id
-    const { id: toyId, msgId } = req.params
+    // const { id: toyId, msgId } = req.params
+    const toyId = req.params.id
+    const msgId = req.params.msgId
 
     const removedId = await toyService.removeToyMsg(toyId, msgId)
     res.send(removedId)
