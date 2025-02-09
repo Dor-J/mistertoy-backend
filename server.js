@@ -162,32 +162,32 @@ app.delete('/api/toy/:toyId', (req, res) => {
 })
 
 // User API
-app.get('/api/user', (req, res) => {
-  const loggedInUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedInUser || !loggedInUser.isAdmin) {
-    return res.status(403).send('Not authorized')
-  }
+// app.get('/api/user', (req, res) => {
+//   const loggedInUser = userService.validateToken(req.cookies.loginToken)
+//   if (!loggedInUser || !loggedInUser.isAdmin) {
+//     return res.status(403).send('Not authorized')
+//   }
 
-  userService
-    .query()
-    .then((users) => res.send(users))
-    .catch((err) => {
-      loggerService.error('Cannot load users', err)
-      res.status(400).send('Cannot load users')
-    })
-})
+//   userService
+//     .query()
+//     .then((users) => res.send(users))
+//     .catch((err) => {
+//       loggerService.error('Cannot load users', err)
+//       res.status(400).send('Cannot load users')
+//     })
+// })
 
-app.get('/api/user/:userId', (req, res) => {
-  const { userId } = req.params
+// app.get('/api/user/:userId', (req, res) => {
+//   const { userId } = req.params
 
-  userService
-    .getById(userId)
-    .then((user) => res.send(user))
-    .catch((err) => {
-      loggerService.error('Cannot load user', err)
-      res.status(400).send('Cannot load user')
-    })
-})
+//   userService
+//     .getById(userId)
+//     .then((user) => res.send(user))
+//     .catch((err) => {
+//       loggerService.error('Cannot load user', err)
+//       res.status(400).send('Cannot load user')
+//     })
+//})
 
 // Auth API
 app.post('/api/auth/login', (req, res) => {
