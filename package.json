@@ -4,16 +4,22 @@
   "scripts": {
     "dev": "set PORT=3030&nodemon --ignore \"./data\" server.js",
     "dev:mac": "export PORT=3030 && nodemon --ignore \"./data\" server.js",
-    "start": "node server.js"
+    "start": "set NODE_ENV=production&&node server.js"
   },
   "author": "Me",
   "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "nodemon": "^3.1.4"
+  },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cryptr": "^6.2.0",
     "dotenv": "^16.4.7",
     "express": "^4.18.2",
-    "follow-redirects": "^1.15.3"
+    "follow-redirects": "^1.15.3",
+    "mongodb": "^6.13.0"
   }
 }
