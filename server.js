@@ -8,6 +8,9 @@ import { loggerService } from './services/logger.service.js'
 //import { toyService } from './services/toy.service.js'
 //import { userService } from './services/user.service.js'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 const app = express()
 
 // Express Config:
@@ -30,12 +33,10 @@ if (process.env.NODE_ENV === 'production') {
 
   app.use(cors(corsOptions))
 }
+
 app.use(express.static('public'))
 app.use(cookieParser())
 app.use(express.json())
-
-// serve the uploads folder static
-app.use('/uploads', express.static('uploads'))
 
 // Express Routing:
 import { authRoutes } from './api/auth/auth.routes.js'
@@ -48,118 +49,118 @@ app.use('/api/user', userRoutes)
 app.use('/api/toy', toyRoutes)
 
 // REST API for Toys
-app.get('/api/toy', (req, res) => {
-  const filterBy = {
-    name: req.query.name || '',
-    minPrice: +req.query.minPrice || 0,
-    inStock: req.query.inStock || '',
-    label: req.query.label || [],
-    sortBy: req.query.sortBy || '',
-    orderBy: req.query.orderBy || '',
-    pageIdx: +req.query.pageIdx || 0,
-  }
-  toyService
-    .query(filterBy)
-    .then((toys) => res.send(toys))
-    .catch((err) => {
-      loggerService.error('Cannot get toys', err)
-      res.status(400).send('Cannot get toys')
-    })
-})
+// app.get('/api/toy', (req, res) => {
+//   const filterBy = {
+//     name: req.query.name || '',
+//     minPrice: +req.query.minPrice || 0,
+//     inStock: req.query.inStock || '',
+//     label: req.query.label || [],
+//     sortBy: req.query.sortBy || '',
+//     orderBy: req.query.orderBy || '',
+//     pageIdx: +req.query.pageIdx || 0,
+//   }
+//   toyService
+//     .query(filterBy)
+//     .then((toys) => res.send(toys))
+//     .catch((err) => {
+//       loggerService.error('Cannot get toys', err)
+//       res.status(400).send('Cannot get toys')
+//     })
+// })
 
-app.get('/api/alltoys', (req, res) => {
-  const loggedInUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedInUser) {
-    return res.status(401).send('Not logged in yet')
-  }
+// app.get('/api/alltoys', (req, res) => {
+//   const loggedInUser = userService.validateToken(req.cookies.loginToken)
+//   if (!loggedInUser) {
+//     return res.status(401).send('Not logged in yet')
+//   }
 
-  toyService
-    .query()
-    .then((toys) => res.send(toys))
-    .catch((err) => {
-      loggerService.error('Cannot get all toys', err)
-      res.status(400).send('Cannot get all toys')
-    })
-})
+//   toyService
+//     .query()
+//     .then((toys) => res.send(toys))
+//     .catch((err) => {
+//       loggerService.error('Cannot get all toys', err)
+//       res.status(400).send('Cannot get all toys')
+//     })
+// })
 
-app.get('/api/toy/:toyId', (req, res) => {
-  const { toyId } = req.params
+// app.get('/api/toy/:toyId', (req, res) => {
+//   const { toyId } = req.params
 
-  toyService
-    .getById(toyId)
-    .then((toy) => res.send(toy))
-    .catch((err) => {
-      loggerService.error('Cannot get toy', err)
-      res.status(400).send('Cannot get toy')
-    })
-})
+//   toyService
+//     .getById(toyId)
+//     .then((toy) => res.send(toy))
+//     .catch((err) => {
+//       loggerService.error('Cannot get toy', err)
+//       res.status(400).send('Cannot get toy')
+//     })
+// })
 
-app.post('/api/toy', (req, res) => {
-  //return res.status(404).send('NOT FOUND')
+// app.post('/api/toy', (req, res) => {
+//   //return res.status(404).send('NOT FOUND')
 
-  const loggedInUser = userService.validateToken(req.cookies.loginToken)
-  // ensure logged in and isAdmin
-  if (!loggedInUser || !loggedInUser.isAdmin) {
-    return res.status(403).send('Not authorized')
-  }
+//   const loggedInUser = userService.validateToken(req.cookies.loginToken)
+//   // ensure logged in and isAdmin
+//   if (!loggedInUser || !loggedInUser.isAdmin) {
+//     return res.status(403).send('Not authorized')
+//   }
 
-  const toy = {
-    name: req.body.name,
-    price: +req.body.price,
-    inStock: req.body.inStock,
-    labels: req.body.labels,
-    createdAt: +req.body.createdAt,
-    updatedAt: +req.body.updatedAt,
-  }
-  toyService
-    .save(toy)
-    .then((savedToy) => res.send(savedToy))
-    .catch((err) => {
-      loggerService.error('Cannot save toy', err)
-      res.status(400).send('Cannot save toy')
-    })
-})
+//   const toy = {
+//     name: req.body.name,
+//     price: +req.body.price,
+//     inStock: req.body.inStock,
+//     labels: req.body.labels,
+//     createdAt: +req.body.createdAt,
+//     updatedAt: +req.body.updatedAt,
+//   }
+//   toyService
+//     .save(toy)
+//     .then((savedToy) => res.send(savedToy))
+//     .catch((err) => {
+//       loggerService.error('Cannot save toy', err)
+//       res.status(400).send('Cannot save toy')
+//     })
+// })
 
-app.put('/api/toy/:id', (req, res) => {
-  const loggedInUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedInUser || !loggedInUser.isAdmin) {
-    return res.status(403).send('Not authorized')
-  }
+// app.put('/api/toy/:id', (req, res) => {
+//   const loggedInUser = userService.validateToken(req.cookies.loginToken)
+//   if (!loggedInUser || !loggedInUser.isAdmin) {
+//     return res.status(403).send('Not authorized')
+//   }
 
-  const { id } = req.params
-  const toy = {
-    _id: id,
-    name: req.body.name,
-    price: +req.body.price,
-    inStock: req.body.inStock,
-    labels: req.body.labels,
-    createdAt: +req.body.createdAt,
-    updatedAt: Date.now(),
-  }
-  toyService
-    .save(toy)
-    .then((savedToy) => res.send(savedToy))
-    .catch((err) => {
-      loggerService.error('Cannot save toy', err)
-      res.status(400).send('Cannot save toy')
-    })
-})
+//   const { id } = req.params
+//   const toy = {
+//     _id: id,
+//     name: req.body.name,
+//     price: +req.body.price,
+//     inStock: req.body.inStock,
+//     labels: req.body.labels,
+//     createdAt: +req.body.createdAt,
+//     updatedAt: Date.now(),
+//   }
+//   toyService
+//     .save(toy)
+//     .then((savedToy) => res.send(savedToy))
+//     .catch((err) => {
+//       loggerService.error('Cannot save toy', err)
+//       res.status(400).send('Cannot save toy')
+//     })
+// })
 
-app.delete('/api/toy/:toyId', (req, res) => {
-  const loggedInUser = userService.validateToken(req.cookies.loginToken)
-  if (!loggedInUser || !loggedInUser.isAdmin) {
-    return res.status(403).send('Not authorized')
-  }
+// app.delete('/api/toy/:toyId', (req, res) => {
+//   const loggedInUser = userService.validateToken(req.cookies.loginToken)
+//   if (!loggedInUser || !loggedInUser.isAdmin) {
+//     return res.status(403).send('Not authorized')
+//   }
 
-  const { toyId } = req.params
-  toyService
-    .remove(toyId)
-    .then(() => res.send('Removed succesfully!'))
-    .catch((err) => {
-      loggerService.error('Cannot remove toy', err)
-      res.status(400).send('Cannot remove toy')
-    })
-})
+//   const { toyId } = req.params
+//   toyService
+//     .remove(toyId)
+//     .then(() => res.send('Removed succesfully!'))
+//     .catch((err) => {
+//       loggerService.error('Cannot remove toy', err)
+//       res.status(400).send('Cannot remove toy')
+//     })
+// })
 
 // User API
 // app.get('/api/user', (req, res) => {
