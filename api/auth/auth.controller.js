@@ -5,12 +5,14 @@ export async function login(req, res) {
   const { username, password } = req.body
   try {
     const user = await authService.login(username, password)
-    const loginToken = authService.getLoginToken(user)
-
-    logger.info('User login: ', user)
-    res.cookie('loginToken', loginToken)
-
-    res.json(user)
+    if (user) {
+      const loginToken = authService.getLoginToken(user)
+      logger.info('User login: ', user)
+      res.cookie('loginToken', loginToken)
+      res.json(user)
+    } else {
+      res.status(401).send('Invalid Credentials')
+    }
   } catch (err) {
     logger.error('Failed to Login ' + err)
     res.status(401).send({ err: 'Failed to Login' })
