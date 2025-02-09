@@ -9,3 +9,5 @@ if (process.env.NODE_ENV === 'production') {
   config = configDev
 }
 config.isGuestMode = true
+
+export const PAGE_SIZE = 4
