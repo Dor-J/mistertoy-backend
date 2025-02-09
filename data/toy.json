@@ -8,7 +8,9 @@
     "_id": "vlJhUB6",
     "inStock": false,
     "updatedAt": 1738581138039,
-    "createdAt": 1738581138039
+    "createdAt": 1738581138039,
+    "nextToyId": "o9ZgCWh",
+    "prevToyId": "AuY31"
   },
   {
     "name": "HTML2",
@@ -243,5 +245,18 @@
     "createdAt": 1738676092883,
     "updatedAt": 1738676092883,
     "_id": "WnbW6"
+  },
+  {
+    "name": "Quick1",
+    "price": 143191,
+    "inStock": true,
+    "labels": [
+      "Puzzle"
+    ],
+    "createdAt": 1738581138039,
+    "updatedAt": 1738581138039,
+    "_id": "AuY31",
+    "nextToyId": "vlJhUB6",
+    "prevToyId": "WnbW6"
   }
 ]
