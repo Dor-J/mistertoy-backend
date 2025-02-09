@@ -12,7 +12,7 @@ export const toyService = {
 const PAGE_SIZE = 4
 const toys = utilService.readJsonFile('data/toy.json')
 
-function query(filterBy) {
+async function query(filterBy) {
   if (!filterBy) return Promise.resolve(toys)
   let filteredToys = toys
   const { name, minPrice, inStock, label, sortBy, orderBy } = filterBy
@@ -67,9 +67,8 @@ function query(filterBy) {
     filteredToys = filteredToys.slice(startIdx, startIdx + PAGE_SIZE)
   }
 
-  return Promise.resolve(getMaxPage(filteredToysLength)).then((maxPage) => {
-    return { toys: filteredToys, maxPage }
-  })
+  const maxPage = await Promise.resolve(getMaxPage(filteredToysLength))
+  return { toys: filteredToys, maxPage }
 }
 
 function getById(toyId) {
@@ -91,7 +90,7 @@ function remove(toyId) {
   return _saveToysToFile()
 }
 
-function save(toy) {
+async function save(toy) {
   if (toy._id) {
     const toyToUpdate = toys.find((currToy) => currToy._id === toy._id)
 
@@ -104,7 +103,8 @@ function save(toy) {
     toy._id = utilService.makeId()
     toys.push(toy)
   }
-  return _saveToysToFile().then(() => toy)
+  await _saveToysToFile()
+  return toy
 }
 
 function _saveToysToFile() {
