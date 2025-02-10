@@ -130,6 +130,7 @@ async function update(user) {
       username: user.username,
       fullname: user.fullname,
       score: user.score,
+      isAdmin: user.isAdmin || false,
       createdAt: user.createdAt,
       updatedAt: Date.now(),
     }
@@ -157,6 +158,7 @@ async function add(user) {
       password: user.password,
       fullname: user.fullname,
       score: user.score || 0,
+      isAdmin: false,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     }
