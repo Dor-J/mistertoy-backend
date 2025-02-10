@@ -1,5 +1,5 @@
 import { userService } from './user.service.js'
-import { logger } from '../../services/logger.service.js'
+import { loggerService } from '../../services/logger.service.js'
 
 export async function getUser(req, res) {
   try {
@@ -7,7 +7,7 @@ export async function getUser(req, res) {
     const user = await userService.getById(userId)
     res.send(user)
   } catch (err) {
-    logger.error('Failed to get user', err)
+    loggerService.error('Failed to get user', err)
     res.status(500).send({ err: 'Failed to get user' })
   }
 }
@@ -16,12 +16,13 @@ export async function getUsers(req, res) {
   try {
     const filterBy = {
       searchCriteria: req.query?.searchCriteria || '',
-      minBalance: +req.query?.minBalance || 0,
+      minScore: +req.query?.minScore || 0,
     }
     const users = await userService.query(filterBy)
+
     res.send(users)
   } catch (err) {
-    logger.error('Failed to get users', err)
+    loggerService.error('Failed to get users', err)
     res.status(500).send({ err: 'Failed to get users' })
   }
 }
@@ -31,7 +32,7 @@ export async function deleteUser(req, res) {
     await userService.remove(req.params.id)
     res.send({ msg: 'Deleted successfully' })
   } catch (err) {
-    logger.error('Failed to delete user', err)
+    loggerService.error('Failed to delete user', err)
     res.status(500).send({ err: 'Failed to delete user' })
   }
 }
@@ -39,10 +40,11 @@ export async function deleteUser(req, res) {
 export async function updateUser(req, res) {
   try {
     const user = req.body
+
     const savedUser = await userService.update(user)
     res.send(savedUser)
   } catch (err) {
-    logger.error('Failed to update user', err)
+    loggerService.error('Failed to update user', err)
     res.status(500).send({ err: 'Failed to update user' })
   }
 }

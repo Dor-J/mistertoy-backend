@@ -1,6 +1,6 @@
 import { utilService } from '../../services/util.service.js'
 import { dbService } from '../../services/db.service.js'
-import { logger } from '../../services/logger.service.js'
+import { loggerService } from '../../services/logger.service.js'
 
 import { ObjectId } from 'mongodb'
 
@@ -35,7 +35,7 @@ async function query(filterBy = {}) {
 
     return users
   } catch (err) {
-    logger.error('No users found', err)
+    loggerService.error('No users found', err)
     throw err
   }
 }
@@ -63,9 +63,10 @@ async function getById(userId) {
       _id: ObjectId.createFromHexString(userId),
     })
     delete user.password
+
     return user
   } catch (err) {
-    logger.error(`Error finding user by ID: ${userId}`, err)
+    loggerService.error(`Error finding user by ID: ${userId}`, err)
     throw err
   }
 }
@@ -80,7 +81,7 @@ async function getByUsername(username) {
     //delete user.password <-----------BUG DONT DELETE PASSWORD BECAUSE ITS FOR COMPARISON
     return user
   } catch (err) {
-    logger.error(`Error finding user by username: ${username}`, err)
+    loggerService.error(`Error finding user by username: ${username}`, err)
     throw err
   }
 }
@@ -97,7 +98,7 @@ async function remove(userId) {
 
     await collection.deleteOne({ _id: ObjectId.createFromHexString(userId) })
   } catch (err) {
-    logger.error(`Error cannot remove user with id: ${userId}`, err)
+    loggerService.error(`Error cannot remove user with id: ${userId}`, err)
     throw err
   }
 }
@@ -120,6 +121,7 @@ async function remove(userId) {
 //   }
 //   return _saveUsersToFile().then(() => miniUser)
 // }
+
 async function update(user) {
   try {
     // peek only updatable fields!
@@ -138,7 +140,7 @@ async function update(user) {
 
     return userToSave
   } catch (err) {
-    logger.error(`cannot update user ${user._id}`, err)
+    loggerService.error(`cannot update user ${user._id}`, err)
     throw err
   }
 }
@@ -158,12 +160,14 @@ async function add(user) {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     }
+
     const collection = await dbService.getCollection('user')
-    await collection.insertOne(userToAdd)
+    const result = await collection.insertOne(userToAdd)
+    userToAdd._id = result.insertedId
 
     return userToAdd
   } catch (err) {
-    logger.error('cannot insert user', err)
+    loggerService.error('cannot insert user', err)
     throw err
   }
 }
@@ -181,8 +185,8 @@ function _buildCriteria(filterBy) {
       },
     ]
   }
-  if (filterBy.minBalance) {
-    criteria.balance = { $gte: filterBy.minBalance }
+  if (filterBy.minScore) {
+    criteria.score = { $gte: filterBy.minScore }
   }
 
   return criteria
