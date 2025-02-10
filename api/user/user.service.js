@@ -75,7 +75,9 @@ async function getByUsername(username) {
     const collection = await dbService.getCollection('user')
 
     const user = await collection.findOne({ username })
-    delete user.password
+    if (!user) return null
+
+    //delete user.password <-----------BUG DONT DELETE PASSWORD BECAUSE ITS FOR COMPARISON
     return user
   } catch (err) {
     logger.error(`Error finding user by username: ${username}`, err)
