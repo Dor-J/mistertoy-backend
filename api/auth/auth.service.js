@@ -1,13 +1,12 @@
-import fs from 'fs'
 import Cryptr from 'cryptr'
 import bcrypt from 'bcrypt'
 
 // const users = utilService.readJsonFile('data/user.json')
 
 import { userService } from '../user/user.service.js'
-import { logger } from '../../services/logger.service.js'
+import { loggerService } from '../../services/logger.service.js'
 
-export const userService = {
+export const authService = {
   signup,
   login,
   getLoginToken,
@@ -17,10 +16,10 @@ export const userService = {
 const cryptr = new Cryptr(process.env.SECRET1 || 'secret-puk-1234')
 
 async function login(username, password) {
-  logger.debug(`auth.service - login with username: ${username}`)
+  loggerService.debug(`auth.service - login with username: ${username}`)
 
   const user = await userService.getByUsername(username)
-  if (!user) throw new Error('Invalid username or password')
+  if (!user || !user.password) throw new Error('Invalid username or password')
 
   const match = await bcrypt.compare(password, user.password)
   if (!match) throw new Error('Invalid username or password')
@@ -30,13 +29,15 @@ async function login(username, password) {
 }
 
 async function signup(username, password, fullname) {
-  const saltRounds = 10
-
-  logger.debug(
+  loggerService.debug(
     `auth.service - signup with username: ${username}, fullname: ${fullname}`
   )
   if (!username || !password || !fullname) throw new Error('Missing details')
 
+  const existUser = await userService.getByUsername(username)
+  if (existUser) throw new Error('Username taken')
+
+  const saltRounds = 10
   const hash = await bcrypt.hash(password, saltRounds)
   return userService.add({ username, password: hash, fullname })
 }
