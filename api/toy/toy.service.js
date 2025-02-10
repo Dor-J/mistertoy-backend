@@ -6,6 +6,7 @@ import { PAGE_SIZE } from '../../config/index.js'
 
 export const toyService = {
   query,
+  queryAll,
   getById,
   remove,
   add,
@@ -16,8 +17,13 @@ export const toyService = {
 
 const toys = utilService.readJsonFile('data/toy.json')
 
-async function query(filterBy) {
-  if (!filterBy) return Promise.resolve(toys)
+async function query(filterBy = {}) {
+  if (!filterBy) {
+    ;(err) => {
+      console.error('ERROR: cannot use filterBy toys', err)
+      throw err
+    }
+  }
   const criteria = _buildCriteria(filterBy)
   const criteriaSort = _buildSortCriteria(filterBy)
 
@@ -47,6 +53,17 @@ async function query(filterBy) {
   return { toys: filteredToys, maxPage }
 }
 
+async function queryAll() {
+  try {
+    const collection = await dbService.getCollection('toy')
+    const allToys = await collection.find({}).toArray()
+    return allToys
+  } catch (err) {
+    console.error('ERROR: cannot find ALL toys')
+    throw err
+  }
+}
+
 //  function getById(toyId) {
 //   const toy = toys.find((toy) => toy._id === toyId)
 
@@ -66,7 +83,7 @@ async function getById(toyId) {
     })
     if (!toy) throw new Error(`Toy ${toyId} not found`)
 
-    toy.createdAt = toy.getTimestamp()
+    toy.createdAt = toy._id.getTimestamp()
 
     return toy
   } catch (err) {
@@ -106,6 +123,7 @@ async function update(toy) {
       price: +req.body.price,
       inStock: req.body.inStock,
       labels: req.body.labels,
+      msg: req.body.msg,
       createdAt: +req.body.createdAt,
       updatedAt: Date.now(),
     }

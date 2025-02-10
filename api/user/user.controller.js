@@ -39,7 +39,13 @@ export async function deleteUser(req, res) {
 
 export async function updateUser(req, res) {
   try {
-    const user = req.body
+    const userId = req.params.id
+    const diff = req.body.diff
+    const user = await userService.getById(userId)
+    if (!user) return res.status(404).send({ err: 'User not found' })
+
+    user.score = (user.score || 0) + diff
+    user._id = userId
 
     const savedUser = await userService.update(user)
     res.send(savedUser)

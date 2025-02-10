@@ -41,11 +41,13 @@ app.use(express.json())
 import { authRoutes } from './api/auth/auth.routes.js'
 import { userRoutes } from './api/user/user.routes.js'
 import { toyRoutes } from './api/toy/toy.routes.js'
+import { statsRoutes } from './api/stats/stats.routes.js'
 
 // routes
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/toy', toyRoutes)
+app.use('/api/stats', statsRoutes)
 
 // REST API for Toys
 // app.get('/api/toy', (req, res) => {

@@ -20,6 +20,16 @@ export async function getToys(req, res) {
   }
 }
 
+export async function getAllToys(req, res) {
+  try {
+    const toys = await toyService.queryAll()
+    res.json(toys)
+  } catch (err) {
+    loggerService.error('Failed to get toys', err)
+    res.status(500).send({ err: 'Failed to get toys' })
+  }
+}
+
 export async function getToyById(req, res) {
   try {
     const toyId = req.params.id
@@ -39,7 +49,8 @@ export async function addToy(req, res) {
       name: req.body.name,
       price: +req.body.price,
       inStock: req.body.inStock,
-      labels: req.body.labels,
+      labels: req.body.labels || [],
+      msg: req.body.msg || [],
       createdAt: +req.body.createdAt,
       updatedAt: +req.body.updatedAt,
     }

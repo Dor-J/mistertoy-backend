@@ -6,6 +6,7 @@ import {
 import { log } from '../../middlewares/logger.middleware.js'
 import {
   getToys,
+  getAllToys,
   getToyById,
   addToy,
   updateToy,
@@ -20,7 +21,6 @@ export const toyRoutes = express.Router()
 // router.use(requireAuth)
 
 toyRoutes.get('/', log, getToys)
-toyRoutes.get('/alltoys', requireAuth, getToys)
 toyRoutes.get('/:id', getToyById)
 toyRoutes.post('/', requireAdmin, addToy)
 toyRoutes.put('/:id', requireAdmin, updateToy)
