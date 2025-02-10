@@ -65,7 +65,7 @@ export async function addToy(req, res) {
 
 export async function updateToy(req, res) {
   try {
-    const toy = { ...req.body, _id: req.params.id, updatedAt: Date.now() }
+    const toy = { ...req.body, _id: req.params.id }
     const updatedToy = await toyService.update(toy)
     res.json(updatedToy)
   } catch (err) {

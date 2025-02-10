@@ -42,6 +42,7 @@ export async function updateUser(req, res) {
     const userId = req.params.id
     const diff = req.body.diff
     const user = await userService.getById(userId)
+
     if (!user) return res.status(404).send({ err: 'User not found' })
 
     user.score = (user.score || 0) + diff

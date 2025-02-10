@@ -119,12 +119,12 @@ async function add(toy) {
 async function update(toy) {
   try {
     const toyToSave = {
-      name: req.body.name,
-      price: +req.body.price,
-      inStock: req.body.inStock,
-      labels: req.body.labels,
-      msg: req.body.msg,
-      createdAt: +req.body.createdAt,
+      name: toy.name,
+      price: toy.price,
+      inStock: toy.inStock,
+      labels: toy.labels,
+      msg: toy.msg,
+      createdAt: toy.createdAt,
       updatedAt: Date.now(),
     }
     const collection = await dbService.getCollection('toy')
