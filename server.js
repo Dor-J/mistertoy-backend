@@ -17,7 +17,6 @@ const app = express()
 if (process.env.NODE_ENV === 'production') {
   // Express serve static files on production environment
   app.use(express.static(path.resolve(__dirname, 'public')))
-  console.log('__dirname: ', __dirname)
 } else {
   const corsOptions = {
     origin: [

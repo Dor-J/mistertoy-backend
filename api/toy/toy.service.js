@@ -2,7 +2,7 @@ import { utilService } from '../../services/util.service.js'
 import { loggerService } from '../../services/logger.service.js'
 import { dbService } from '../../services/db.service.js'
 import { ObjectId } from 'mongodb'
-import { PAGE_SIZE } from '../../config/index'
+import { PAGE_SIZE } from '../../config/index.js'
 
 export const toyService = {
   query,
@@ -28,7 +28,7 @@ async function query(filterBy) {
       .sort(criteriaSort)
       .toArray()
   } catch (err) {
-    console.log('ERROR: cannot find toys')
+    console.error('ERROR: cannot find toys')
     throw err
   }
 
@@ -70,7 +70,7 @@ async function getById(toyId) {
 
     return toy
   } catch (err) {
-    logger.error(`Error finding toy ${toyId}`, err)
+    loggerService.error(`Error finding toy ${toyId}`, err)
     throw err
   }
 }
@@ -83,7 +83,7 @@ async function remove(toyId) {
     })
     return deletedCount
   } catch (err) {
-    logger.error(`cannot remove toy ${toyId}`, err)
+    loggerService.error(`cannot remove toy ${toyId}`, err)
     throw err
   }
 }
@@ -94,7 +94,7 @@ async function add(toy) {
     await collection.insertOne(toy)
     return toy
   } catch (err) {
-    logger.error('cannot insert toy', err)
+    loggerService.error('cannot insert toy', err)
     throw err
   }
 }
@@ -116,7 +116,7 @@ async function update(toy) {
     )
     return toy
   } catch (err) {
-    logger.error(`cannot update toy ${toy._id}`, err)
+    loggerService.error(`cannot update toy ${toy._id}`, err)
     throw err
   }
 }
@@ -133,7 +133,7 @@ async function addToyMsg(toyId, msg) {
     )
     return msg
   } catch (err) {
-    logger.error(`cannot add toy msg ${toyId}`, err)
+    loggerService.error(`cannot add toy msg ${toyId}`, err)
     throw err
   }
 }
@@ -147,7 +147,7 @@ async function removeToyMsg(toyId, msgId) {
     )
     return msgId
   } catch (err) {
-    logger.error(`cannot remove toy msg ${toyId}`, err)
+    loggerService.error(`cannot remove toy msg ${toyId}`, err)
     throw err
   }
 }
@@ -175,7 +175,7 @@ function _buildCriteria(filterBy) {
     criteria.name = { $regex: name, $options: 'i' }
   }
   if (minPrice) {
-    criteria.price = { $gte: parseFloat(minPrice) }
+    criteria.price = { $gte: minPrice }
   }
 
   const isInStock =
