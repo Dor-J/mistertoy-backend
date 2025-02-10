@@ -4,7 +4,7 @@ import { loggerService } from '../../services/logger.service.js'
 
 import { ObjectId } from 'mongodb'
 
-const users = utilService.readJsonFile('data/user.json')
+//const users = utilService.readJsonFile('data/user.json')
 
 export const userService = {
   query,

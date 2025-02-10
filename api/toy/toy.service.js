@@ -15,7 +15,7 @@ export const toyService = {
   removeToyMsg,
 }
 
-const toys = utilService.readJsonFile('data/toy.json')
+//const toys = utilService.readJsonFile('data/toy.json')
 
 async function query(filterBy = {}) {
   if (!filterBy) {
