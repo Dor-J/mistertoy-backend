@@ -42,12 +42,18 @@ import { authRoutes } from './api/auth/auth.routes.js'
 import { userRoutes } from './api/user/user.routes.js'
 import { toyRoutes } from './api/toy/toy.routes.js'
 import { statsRoutes } from './api/stats/stats.routes.js'
+import { reviewRoutes } from './api/review/review.routes.js'
+import { setupAsyncLocalStorage } from './middlewares/setupAls.middleware.js'
 
 // routes
+
+app.all('*', setupAsyncLocalStorage)
+
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/toy', toyRoutes)
 app.use('/api/stats', statsRoutes)
+app.use('/api/review', reviewRoutes)
 
 // Fallback route
 app.get('/**', (req, res) => {
