@@ -64,17 +64,6 @@ async function queryAll() {
   }
 }
 
-//  function getById(toyId) {
-//   const toy = toys.find((toy) => toy._id === toyId)
-
-//   if (!toy) return Promise.reject(`Toy not found`)
-
-//   // add next/prev ids
-//   _setNextPrevToyId(toy)
-
-//   return Promise.resolve(toy)
-// }
-
 async function getById(toyId) {
   try {
     const collection = await dbService.getCollection('toy')
@@ -84,6 +73,9 @@ async function getById(toyId) {
     if (!toy) throw new Error(`Toy ${toyId} not found`)
 
     toy.createdAt = toy._id.getTimestamp()
+
+    //   // add next/prev ids
+    //   _setNextPrevToyId(toy)
 
     return toy
   } catch (err) {
@@ -123,7 +115,7 @@ async function update(toy) {
       price: toy.price,
       inStock: toy.inStock,
       labels: toy.labels,
-      msg: toy.msg,
+      msgs: toy.msgs,
       createdAt: toy.createdAt,
       updatedAt: Date.now(),
     }
@@ -141,7 +133,7 @@ async function update(toy) {
 
 async function addToyMsg(toyId, msg) {
   try {
-    msg.id = utilService.makeId()
+    msg.id = utilService.makeId(6)
     msg.createdAt = Date.now()
 
     const collection = await dbService.getCollection('toy')
@@ -221,3 +213,24 @@ function _buildSortCriteria(filterBy) {
 
   return criteriaSort
 }
+
+// function _buildCriteria(filterBy) {
+//   const filterCriteria = {}
+//   if (filterBy.txt) {
+//     filterCriteria.name = { $regex: filterBy.txt, $options: 'i' }
+//   }
+//   if (filterBy.inStock) {
+//     filterCriteria.inStock = JSON.parse(filterBy.inStock)
+//   }
+//   if (filterBy.labels && filterBy.labels.length) {
+//     filterCriteria.labels = { $all: filterBy.labels }
+//   }
+//   const sortCriteria = {}
+//   const sortBy = filterBy.sortBy
+//   if (sortBy.type) {
+//     const sortDirection = +sortBy.sortDir
+//     sortCriteria[sortBy.type] = sortDirection
+//   } else sortCriteria.createdAt = -1
+//   const skip = filterBy.pageIdx !== undefined ? filterBy.pageIdx * PAGE_SIZE : 0
+//   return { filterCriteria, sortCriteria, skip }
+// }

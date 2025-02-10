@@ -50,7 +50,7 @@ export async function addToy(req, res) {
       price: +req.body.price,
       inStock: req.body.inStock,
       labels: req.body.labels || [],
-      msg: req.body.msg || [],
+      msgs: req.body.msgs || [],
       createdAt: +req.body.createdAt,
       updatedAt: +req.body.updatedAt,
     }
@@ -87,11 +87,12 @@ export async function removeToy(req, res) {
 
 export async function addToyMsg(req, res) {
   const { loggedinUser } = req
-  const { _id, fullname } = loggedinUser
   try {
+    const { _id, fullname } = loggedinUser
     const toyId = req.params.id
+    const { txt } = req.body
     const msg = {
-      txt: req.body.txt,
+      txt,
       by: {
         _id,
         fullname,
@@ -108,10 +109,7 @@ export async function addToyMsg(req, res) {
 export async function removeToyMsg(req, res) {
   const { loggedinUser } = req
   try {
-    // const toyId = req.params.id
-    // const { id: toyId, msgId } = req.params
-    const toyId = req.params.id
-    const msgId = req.params.msgId
+    const { toyId, msgId } = req.params
 
     const removedId = await toyService.removeToyMsg(toyId, msgId)
     res.send(removedId)
