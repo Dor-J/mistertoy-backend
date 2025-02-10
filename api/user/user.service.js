@@ -103,25 +103,6 @@ async function remove(userId) {
   }
 }
 
-// function save(user) {
-//   let userToUpdate = user
-//   if (user._id) {
-//     userToUpdate = users.find((_user) => user._id === _user._id)
-//     userToUpdate.score = user.score
-//     userToUpdate.isAdmin = user.isAdmin
-//   } else {
-//     userToUpdate._id = utilService.makeId(7)
-//     users.push(userToUpdate)
-//   }
-//   const miniUser = {
-//     _id: userToUpdate._id,
-//     fullname: userToUpdate.fullname,
-//     score: userToUpdate.score,
-//     isAdmin: user.isAdmin,
-//   }
-//   return _saveUsersToFile().then(() => miniUser)
-// }
-
 async function update(user) {
   try {
     // peek only updatable fields!
@@ -157,7 +138,7 @@ async function add(user) {
       username: user.username,
       password: user.password,
       fullname: user.fullname,
-      score: user.score || 0,
+      score: user.score || 1000,
       isAdmin: false,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -193,15 +174,3 @@ function _buildCriteria(filterBy) {
 
   return criteria
 }
-
-// function _saveUsersToFile() {
-//   return new Promise((resolve, reject) => {
-//     const usersStr = JSON.stringify(users, null, 2)
-//     fs.writeFile('data/user.json', usersStr, (err) => {
-//       if (err) {
-//         return console.error(err)
-//       }
-//       resolve()
-//     })
-//   })
-// }

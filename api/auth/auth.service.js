@@ -58,7 +58,7 @@ function validateToken(token) {
     const user = JSON.parse(str)
     return user
   } catch (err) {
-    console.log('Invalid login token')
+    console.error('Invalid login token')
   }
   return null
 }
