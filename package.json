@@ -1,5 +1,5 @@
 {
-  "name": "proj-node-server",
+  "name": "mistertoy-backend",
   "version": "1.0.0",
   "scripts": {
     "dev": "set PORT=3030&nodemon --ignore \"./data\" server.js",
