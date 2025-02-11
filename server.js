@@ -2,8 +2,11 @@ import cors from 'cors'
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import path, { dirname } from 'path'
+import http from 'http'
 import { fileURLToPath } from 'url'
+
 import { loggerService } from './services/logger.service.js'
+import { setupSocketAPI } from './services/socket.service.js'
 
 //import { toyService } from './services/toy.service.js'
 //import { userService } from './services/user.service.js'
@@ -12,6 +15,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const app = express()
+const server = http.createServer(app)
 
 // Express Config:
 if (process.env.NODE_ENV === 'production') {
@@ -54,6 +58,8 @@ app.use('/api/user', userRoutes)
 app.use('/api/toy', toyRoutes)
 app.use('/api/stats', statsRoutes)
 app.use('/api/review', reviewRoutes)
+
+setupSocketAPI(server)
 
 // Fallback route
 app.get('/**', (req, res) => {
