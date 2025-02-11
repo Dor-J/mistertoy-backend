@@ -7,12 +7,12 @@ import { ObjectId } from 'mongodb'
 //const users = utilService.readJsonFile('data/user.json')
 
 export const userService = {
-  query,
-  getById,
-  getByUsername,
-  remove,
-  update,
-  add,
+  add, // Create (Signup)
+  getById, // Read (Profile page)
+  update, // Update (Edit profile)
+  remove, // Delete (remove user)
+  query, // List (of users)
+  getByUsername, // Used for Login
 }
 
 // function query() {
@@ -57,12 +57,20 @@ async function query(filterBy = {}) {
 
 async function getById(userId) {
   try {
+    let criteria = { _id: ObjectId.createFromHexString(userId) }
+
     const collection = await dbService.getCollection('user')
 
-    const user = await collection.findOne({
-      _id: ObjectId.createFromHexString(userId),
-    })
+    const user = await collection.findOne(criteria)
     delete user.password
+
+    criteria = { byUserId: userId }
+
+    user.givenReviews = await reviewService.query(criteria)
+    user.givenReviews = user.givenReviews.map((review) => {
+      delete review.byUser
+      return review
+    })
 
     return user
   } catch (err) {
@@ -76,9 +84,9 @@ async function getByUsername(username) {
     const collection = await dbService.getCollection('user')
 
     const user = await collection.findOne({ username })
-    if (!user) return null
+    if (!user) throw new Error('User not found by username')
 
-    //delete user.password <-----------BUG DONT DELETE PASSWORD BECAUSE ITS FOR COMPARISON
+    //delete user.password <--------BUG, DONT DELETE PASSWORD BECAUSE ITS FOR COMPARISON
     return user
   } catch (err) {
     loggerService.error(`Error finding user by username: ${username}`, err)
@@ -94,9 +102,11 @@ async function getByUsername(username) {
 // }
 async function remove(userId) {
   try {
+    const criteria = { _id: ObjectId.createFromHexString(userId) }
+
     const collection = await dbService.getCollection('user')
 
-    await collection.deleteOne({ _id: ObjectId.createFromHexString(userId) })
+    await collection.deleteOne(criteria)
   } catch (err) {
     loggerService.error(`Error cannot remove user with id: ${userId}`, err)
     throw err
