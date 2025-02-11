@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(cors(corsOptions))
 }
 
-app.use(express.static('public'))
+// No cors method: app.use(express.static('public'))
 app.use(cookieParser())
 app.use(express.json())
 
