@@ -101,6 +101,8 @@ async function add(toy) {
   try {
     const collection = await dbService.getCollection('toy')
     await collection.insertOne(toy)
+    const result = await collection.insertOne(toy)
+    toy._id = result.insertedId
     return toy
   } catch (err) {
     loggerService.error('cannot insert toy', err)
