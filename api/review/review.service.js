@@ -38,24 +38,34 @@ async function query(filterBy = {}) {
         {
           $unwind: '$aboutToy',
         },
+        {
+          $project: {
+            txt: true,
+            'byUser._id': true,
+            'byUser.fullname': true,
+            'aboutToy._id': true,
+            'aboutToy.fullname': true,
+          },
+        },
       ])
       .toArray()
 
-    reviews = reviews.map(review => {
-      review.byUser = {
-        _id: review.byUser._id,
-        fullname: review.byUser.fullname,
-      }
-      review.aboutToy = {
-        _id: review.aboutToy._id,
-        name: review.aboutToy.name,
-        price: review.aboutToy.price,
-      }
-      review.createdAt = review._id.getTimestamp()
-      delete review.byUserId
-      delete review.aboutToyId
-      return review
-    })
+    // Instead this is done with the $project SELECT like feature
+    // reviews = reviews.map(review => {
+    //   review.byUser = {
+    //     _id: review.byUser._id,
+    //     fullname: review.byUser.fullname,
+    //   }
+    //   review.aboutToy = {
+    //     _id: review.aboutToy._id,
+    //     name: review.aboutToy.name,
+    //     price: review.aboutToy.price,
+    //   }
+    //   review.createdAt = review._id.getTimestamp()
+    //   delete review.byUserId
+    //   delete review.aboutToyId
+    //   return review
+    // })
 
     return reviews
   } catch (err) {
