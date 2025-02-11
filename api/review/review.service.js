@@ -102,7 +102,8 @@ async function add(review) {
       txt: review.txt,
     }
     const collection = await dbService.getCollection('review')
-    await collection.insertOne(reviewToAdd)
+    const result = await collection.insertOne(reviewToAdd)
+    reviewToAdd._id = result.insertedId
     return reviewToAdd
   } catch (err) {
     loggerService.error('cannot add review', err)
