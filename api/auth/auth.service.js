@@ -18,8 +18,12 @@ const cryptr = new Cryptr(process.env.SECRET1 || 'secret-puk-1234')
 async function login(username, password) {
   loggerService.debug(`auth.service - login with username: ${username}`)
 
-  const user = await userService.getByUsername(username)
-  if (!user || !user.password) throw new Error('Invalid username or password')
+  let user
+  try {
+    user = await userService.getByUsername(username)
+  } catch (err) {
+    throw new Error('Invalid username or password')
+  }
 
   const match = await bcrypt.compare(password, user.password)
   if (!match) throw new Error('Invalid username or password')
@@ -34,7 +38,12 @@ async function signup(username, password, fullname) {
   )
   if (!username || !password || !fullname) throw new Error('Missing details')
 
-  const existUser = await userService.getByUsername(username)
+  let existUser = null
+  try {
+    existUser = await userService.getByUsername(username)
+  } catch (err) {
+    if (err.message !== 'User not found by username') throw err
+  }
   if (existUser) throw new Error('Username taken')
 
   const saltRounds = 10

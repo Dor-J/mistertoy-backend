@@ -34,15 +34,16 @@ export async function signup(req, res) {
     // Never write passwords to log file!!!
 
     const account = await authService.signup(username, password, fullname)
+
+    const safeAccount = { ...account }
+    delete safeAccount.password
     loggerService.debug(
-      `auth.route - new account created: ` + JSON.stringify(account)
+      `auth.route - new account created: ${JSON.stringify(safeAccount)}`
     )
 
     const user = await authService.login(username, password)
     const loginToken = authService.getLoginToken(user)
-
     res.cookie('loginToken', loginToken)
-
     res.json(user)
   } catch (err) {
     loggerService.error('Failed to signup ' + err)
