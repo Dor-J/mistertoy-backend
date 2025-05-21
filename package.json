@@ -6,7 +6,7 @@
     "dev:mac": "export PORT=3030 && nodemon --ignore \"./data\" server.js",
     "start": "node server.js"
   },
-  "author": "Me",
+  "author": "Dor-J",
   "type": "module",
   "dependencies": {
     "cookie-parser": "^1.4.7",
